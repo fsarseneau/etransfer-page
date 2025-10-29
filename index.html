@@ -13,10 +13,51 @@
 </video>
 
   <main>
-    <h1>💸 Send an e-Transfer to<br>jonathan.carson13@gmail.com<br>...IF YOU DARE🎃🎃🎃</h1>
-    <p>Auto-deposit is enabled — no security question needed.</p>
-    <a class="button" href="mailto:korovo@email.com?subject=E-transfer">Copy Email Address</a>
-    <p>Then open your banking app → Interac e-Transfer → Send Money → Paste the email.</p>
+    <div>
+      <div style="font-size: 20px;">💸 Send an e-Transfer</div>
+      <div>...IF YOU DARE🎃🎃🎃</div>
+      <button class="button" id="copyButton">jonathan.carson13@gmail.com</button>
+      <div style="padding: 15px">Click to copy email address.</div>
+      <div>Auto-deposit is enabled — no security question needed.</div>
+    </div>
   </main>
+
+  <script>
+    const button = document.getElementById('copyButton');
+
+  button.addEventListener('click', async () => {
+    const originalText = button.textContent.trim(); // store original text
+
+    // Fallback for older mobile browsers
+    if (!navigator.clipboard) {
+      const textarea = document.createElement("textarea");
+      textarea.value = originalText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+        console.error("Fallback copy failed:", err);
+      }
+      document.body.removeChild(textarea);
+    } else {
+      try {
+        await navigator.clipboard.writeText(originalText);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+        return; // exit if it failed
+      }
+    }
+
+    // Now update button text AFTER copying
+    button.textContent = "Copied!";
+    button.classList.add("copied");
+
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.classList.remove("copied");
+    }, 1500);
+  });
+  </script>
 </body>
 </html>
